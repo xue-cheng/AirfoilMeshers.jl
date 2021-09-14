@@ -1,0 +1,29 @@
+name = "AirfoilMeshers"
+uuid = "fb06ee43-ff84-401b-b5ac-2522e63f9402"
+authors = ["Cheng XUE <xuecheng@nuaa.edu.cn>"]
+version = "0.1.0"
+
+[deps]
+BlockArrays = "8e7c35d0-a365-5155-bbbb-fb81a777f24e"
+BlockBandedMatrices = "ffab5731-97b5-5995-9138-79e8c1846df0"
+Dierckx = "39dd38d3-220a-591b-8e3c-4c3a8c710a94"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+TimerOutputs = "a759f4b9-e2f1-59dc-863e-4aeb61b1ea8f"
+
+[compat]
+BlockArrays = "0.16"
+BlockBandedMatrices = "0.10"
+Dierckx = "0.5"
+StaticArrays = "1.2"
+TimerOutputs = "0.5"
+julia = "1"
+
+[extras]
+ParametricAirfoils = "4c14af30-da9f-11e9-34cd-f9f0aee9fd2c"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test", "ParametricAirfoils"]
