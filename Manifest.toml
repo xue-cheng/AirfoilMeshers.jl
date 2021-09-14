@@ -14,18 +14,18 @@ uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 
 [[BandedMatrices]]
 deps = ["ArrayLayouts", "FillArrays", "LinearAlgebra", "Random", "SparseArrays"]
-git-tree-sha1 = "d17071d7fc9a98ca2d958cd217e62a17c5eeebed"
+git-tree-sha1 = "ce68f8c2162062733f9b4c9e3700d5efc4a8ec47"
 uuid = "aae01518-5342-5314-be14-df237901396f"
-version = "0.16.10"
+version = "0.16.11"
 
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
 [[BlockArrays]]
 deps = ["ArrayLayouts", "FillArrays", "LinearAlgebra"]
-git-tree-sha1 = "a00a692cd39a8b5f7e780f0327a992c4aa177c67"
+git-tree-sha1 = "10e9384f6c22805066a722e4c8dc014cf26f2bc7"
 uuid = "8e7c35d0-a365-5155-bbbb-fb81a777f24e"
-version = "0.16.5"
+version = "0.16.6"
 
 [[BlockBandedMatrices]]
 deps = ["ArrayLayouts", "BandedMatrices", "BlockArrays", "FillArrays", "LinearAlgebra", "MatrixFactorizations", "SparseArrays", "Statistics"]
@@ -104,9 +104,9 @@ uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 
 [[MatrixFactorizations]]
 deps = ["ArrayLayouts", "LinearAlgebra", "Printf", "Random"]
-git-tree-sha1 = "24814f4e65b4521ba081ccaaea9f5c6533c462a2"
+git-tree-sha1 = "1a0358d0283b84c3ccf9537843e3583c3b896c59"
 uuid = "a3b82374-2e81-5b9e-98ce-41277c0e4c87"
-version = "0.8.4"
+version = "0.8.5"
 
 [[MbedTLS_jll]]
 deps = ["Artifacts", "Libdl"]
