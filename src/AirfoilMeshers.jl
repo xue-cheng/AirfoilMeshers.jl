@@ -1,7 +1,7 @@
 module AirfoilMeshers
 
 using Statistics, Printf, LinearAlgebra
-using BlockBandedMatrices, StaticArrays, BlockArrays
+using StaticArrays
 using Dierckx
 using TimerOutputs
 struct AirfoilMesh
@@ -12,6 +12,7 @@ end
 
 const to = TimerOutput()
 
+include("tridiag/solver.jl")
 include("surface/surface.jl")
 include("hyperbolic/hyperbolic.jl")
 include("output/output.jl")

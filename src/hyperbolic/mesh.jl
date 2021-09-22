@@ -230,9 +230,14 @@ function hyp_run!(
     # solve
     dat.S[2] -= dat.A[2] * r1[1]
     dat.S[nξ - 1] -= dat.C[nξ - 1] * r1[nξ]
-    M = BlockTridiagonal(dat.A[3:(nξ - 1)], dat.B[2:(nξ - 1)], dat.C[2:(nξ - 2)])
-    R = mortar(@view dat.S[2:(nξ - 1)])
-    P = mortar(@view r1[2:(nξ - 1)])
-    P .= M \ R
+    solve_block_tridiag!(
+        view(dat.A, 2:(nξ - 1)),
+        view(dat.B, 2:(nξ - 1)),
+        view(dat.C, 2:(nξ - 1)),
+        view(dat.S, 2:(nξ - 1)),
+    )
+    for ξ in 2:(nξ - 1)
+        r1[ξ] .= dat.S[ξ]
+    end
     return nothing
 end

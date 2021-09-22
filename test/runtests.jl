@@ -7,5 +7,6 @@ using StaticArrays
 
 mkpath(joinpath(@__DIR__, "output"))
 
+include("test_tridiag.jl")
 include("test_surface.jl")
 include("test_hyperbolic.jl")
