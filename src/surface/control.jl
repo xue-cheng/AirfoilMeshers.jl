@@ -13,8 +13,8 @@ end
 struct TrailingNode{S} <: AbstractSurfaceNode
     TrailingNode(side::Symbol) = (@assert side in (:L, :U); new{side}())
 end
-to_c(::TrailingNode{:U})::Float64 = Inf
-to_c(::TrailingNode{:L})::Float64 = -Inf
+to_c(::TrailingNode{:U})::Float64 = 1
+to_c(::TrailingNode{:L})::Float64 = -1
 to_s(::TrailingNode{:U}, ::Float64, smax::Float64, ::Spline1D, ::Spline1D)::Float64 = smax
 to_s(::TrailingNode{:L}, ::Float64, smax::Float64, ::Spline1D, ::Spline1D)::Float64 = 0
 
@@ -30,13 +30,21 @@ to_s(n::SurfaceNode{:L}, ::Float64, ::Float64, ::Spline1D, sl::Spline1D)::Float6
 struct SurfaceDistribution
     node::Vector{AbstractSurfaceNode}
     dist::Vector{AbstractDist}
+    function SurfaceDistribution(
+        nodes::N, dist::D
+    )where{NN<:AbstractSurfaceNode, DD<:AbstractDist, N<:AbstractVector{NN}, D<:AbstractVector{DD}}
+        @assert (length(nodes)-1) == length(dist)
+        @assert length(dist) > 0 
+        return new(nodes, dist)
+    end
     function SurfaceDistribution(ds_le, ds_te, ds_up_max, ds_lo_max, rs_max=1.2)
-        node = [TrailingNode(:L), LeadingNode(), TrailingNode(:U)]
-        dist = [
-            TanhSpacing(ds_te, ds_le; dsmax=ds_lo_max, rsmax=rs_max),
-            TanhSpacing(ds_le, ds_te; dsmax=ds_up_max, rsmax=rs_max),
-        ]
-        return new(node, dist)
+        return new(
+            [TrailingNode(:L), LeadingNode(), TrailingNode(:U)],
+            [
+                TanhSpacing(ds_te, ds_le; dsmax=ds_lo_max, rsmax=rs_max),
+                TanhSpacing(ds_le, ds_te; dsmax=ds_up_max, rsmax=rs_max),
+            ],
+        )
     end
 end
 

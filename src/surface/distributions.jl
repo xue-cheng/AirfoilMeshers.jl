@@ -18,7 +18,7 @@ function EqualSpacing(np::Int=0; dsmax::Real=-1)
     else
         dsmax <= 0 || @warn "`dsmax` is ignored since `np` has been specified"
     end
-    return EqualSpacing{E}(ds0, ds1, dsmax, rsmax, np)
+    return EqualSpacing{E}(np, dsmax)
 end
 
 isvalid(d::EqualSpacing{true}) = d.dsmax > 0

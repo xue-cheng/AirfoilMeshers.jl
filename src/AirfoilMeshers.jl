@@ -18,6 +18,7 @@ include("hyperbolic/hyperbolic.jl")
 include("output/output.jl")
 
 export SurfaceDistribution, TanhSpacing, EqualSpacing
+export LeadingNode, TrailingNode, SurfaceNode
 export surface_mesh
 export WakeInfo, create_wake, join_wake
 export StepSize, UserStepSize, SpecifiedStepSize, ExpStepSize, ConstStepSize, MinStepSize, FilterStepSize

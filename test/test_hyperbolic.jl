@@ -52,4 +52,50 @@
         
         save_mesh("output/C0012.cas", mesh, :FLUENT)
     end
+    @testset "Surface Jet" begin
+        airfoil = NACA"0012"s
+        xjet = 0.95
+        hjet = 0.01
+        tx, ty = t_upper(airfoil, xjet)
+        lbjet = xjet - tx*hjet/2
+        rbjet = xjet + tx*hjet/2
+        npjet = 33
+        dsjet = hjet / (npjet-1)
+        ds_le = 5e-4
+        ds_te = 1e-5
+        ds_up_max = 0.01
+        ds_lo_max = 0.025
+        rs_max = 1.1
+        snode = [
+            TrailingNode(:L),
+            LeadingNode(),
+            SurfaceNode(:U,lbjet),
+            SurfaceNode(:U,rbjet),
+            TrailingNode(:U)
+        ]
+        sdist = [
+            TanhSpacing(ds_te, ds_le; dsmax=ds_lo_max, rsmax=rs_max),
+            TanhSpacing(ds_le, dsjet; dsmax=ds_up_max, rsmax=rs_max),
+            EqualSpacing(npjet),
+            TanhSpacing(dsjet, ds_te; dsmax=ds_up_max, rsmax=rs_max)
+        ]
+        dist = SurfaceDistribution(snode,sdist)
+        x0, y0 = gen_airfoil(airfoil, 257)
+        points = surface_mesh(dist, x0, y0; mg_level=2)
+        mesher = HyperbolicMesher(
+            :C,
+            MinStepSize(ExpStepSize(5e-6, 1.14), 2),
+            SymmetryBoundary(),
+            SymmetryBoundary();
+            f_blend=1e-5,
+            n_smooth=10,
+            wake_len=25,
+            wake_maxl=1,
+            wake_ratio=1.14,
+            wake_aoa=0,
+        )
+
+        mesh = gen_mesh(mesher, points, 20; mg_level=2)
+        save_mesh("output/surfjet.dat", mesh, :TECPLOT)
+    end
 end
