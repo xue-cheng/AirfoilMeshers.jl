@@ -4,6 +4,7 @@ using Statistics, Printf, LinearAlgebra
 using StaticArrays
 using Dierckx
 using TimerOutputs
+using FortranFiles
 struct AirfoilMesh
     topo::Symbol
     grid::Matrix{MVector{2,Float64}}

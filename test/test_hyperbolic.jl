@@ -28,6 +28,8 @@
         )
         mesh = gen_mesh(mesher, p0, 0.3; mg_level=2)
         save_mesh("output/L_outside.dat", mesh, :TECPLOT)
+        save_mesh("output/L_out.cfl.dat", mesh, :PLOT3D; cfl3d=true)
+        save_mesh("output/L_out.p3d.dat", mesh, :PLOT3D)
     end
     @testset "C0012" begin
         dist = SurfaceDistribution(5e-4, 1e-5, 0.01, 0.025)
