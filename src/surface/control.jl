@@ -56,49 +56,20 @@ function nodes(
     @assert length(s) == length(d.node) == nseg + 1
     @assert issorted(d.node)
     @assert issorted(s) && s[1] == 0
+    @assert 0 <= mg_level <= 6
+    mg_step = 2^mg_level
     ssall = []
     for i in 1:nseg
         s0 = s[i]
         s1 = s[i + 1]
         len = s1 - s0
         ss = nodes(d.dist[i]; len=len) .+ s0
+        if mg_level > 0
+            np = ceil(Int, (length(ss) - 1)//mg_step)*mg_step+1
+            ss = nodes(d.dist[i], np; len=len) .+ s0
+        end
         @assert length(ss) > 1
         push!(ssall, ss)
-    end
-    if mg_level > 0
-        all(np_fixed.(d.dist)) && error(
-            "Cannot ensure multi-grid level = $mg_level, all segments have fixed `np`"
-        )
-        mg_step = 2^mg_level
-        np_tot = sum(length, ssall) - nseg + 1 # nseg has (nseg-1) common nodes
-        n, m = divrem(np_tot - 1, mg_step)
-        if m != 0
-            for p in 1:(mg_step - m)
-                ratios = map(1:nseg) do i
-                    if np_fixed(d.dist[i])
-                        return 0
-                    end
-                    ss = ssall[i]
-                    ds = ss[2:end] - ss[1:(end - 1)]
-                    mr = 1.0
-                    for j in 2:length(ds)
-                        r = ds[j] / ds[j - 1]
-                        if r < 1
-                            r = 1 / r
-                        end
-                        if r > mr
-                            mr = r
-                        end
-                    end
-                    return mr
-                end
-                i = argmax(ratios)
-                np0 = length(ssall[i])
-                s0 = s[i]
-                slen = s[i + 1] - s0
-                ssall[i] = nodes(d.dist[i], np0 + 1; len=slen) .+ s0
-            end
-        end
     end
     ret = ssall[1]
     for i in 2:nseg
