@@ -57,13 +57,19 @@ function nodes(d::TanhSpacing{true}; len::L=1.0) where {L<:Real}
     end
     if d.rsmax > 1.01
         rsm = ratio_max(ds)
-        while rsm > d.rsmax
+        if (rsm > d.rsmax)
             np = max(round(Int, np * (rsm / d.rsmax)^0.45), np + 1)
             s = nodes(d, np; len=len)
             ds = s[2:end] - s[1:(end - 1)]
-            rsm1 = ratio_max(ds)
-            rsm1 > rsm && error("cannot determin `np`, check inputs.")
-            rsm = rsm1
+            rsm = ratio_max(ds)
+            while rsm > d.rsmax
+                np = max(round(Int, np * (rsm / d.rsmax)^0.45), np + 1)
+                s = nodes(d, np; len=len)
+                ds = s[2:end] - s[1:(end - 1)]
+                rsm1 = ratio_max(ds)
+                rsm1 > rsm && error("cannot determin `np`, check inputs.")
+                rsm = rsm1
+            end
         end
     end
     return s
