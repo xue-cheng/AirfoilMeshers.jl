@@ -13,7 +13,7 @@
             SymmetryBoundary(),
             SymmetryBoundary();
             f_blend=1,
-            n_smooth=25,
+            n_smooth=25
         )
         mesh = gen_mesh(mesher, p0, 0.3; mg_level=2)
         save_mesh("output/L_inside.dat", mesh, :TECPLOT)
@@ -24,7 +24,7 @@
             SymmetryBoundary(),
             SymmetryBoundary();
             f_blend=1,
-            n_smooth=25,
+            n_smooth=25
         )
         mesh = gen_mesh(mesher, p0, 0.3; mg_level=2)
         save_mesh("output/L_outside.dat", mesh, :TECPLOT)
@@ -33,8 +33,8 @@
     end
     @testset "C0012" begin
         dist = SurfaceDistribution(5e-4, 1e-5, 0.01, 0.025)
-        af = NACA"0012"s
-        x0, y0 = gen_airfoil(af, 257)
+        x0 = copy(xaf)
+        y0 = copy(yaf)
         points = surface_mesh(dist, x0, y0; mg_level=2)
         mesher = HyperbolicMesher(
             :C,
@@ -46,33 +46,35 @@
             wake_len=25,
             wake_maxl=1,
             wake_ratio=1.14,
-            wake_aoa=10,
+            wake_aoa=10
         )
 
         mesh = gen_mesh(mesher, points, 20; mg_level=2)
         save_mesh("output/C0012.dat", mesh, :TECPLOT)
-        
+
         save_mesh("output/C0012.cas", mesh, :FLUENT)
     end
     @testset "Surface Jet" begin
-        airfoil = NACA"0012"s
-        xjet = 0.95
-        hjet = 0.01
-        tx, ty = t_upper(airfoil, xjet)
-        lbjet = xjet - tx*hjet/2
-        rbjet = xjet + tx*hjet/2
+        x0 = copy(xaf)
+        y0 = copy(yaf)
+        xjet = 0.90
+        wjet = 0.01
+        xlb = xjet - wjet / 2
+        ylb = yt(xlb, t)
+        xrb = xjet + wjet / 2
+        yrb = yt(xrb, t)
         npjet = 33
-        dsjet = hjet / (npjet-1)
+        dsjet = sqrt((yrb - ylb)^2 + (xrb - xlb)^2) / (npjet - 1)
         ds_le = 5e-4
         ds_te = 1e-5
         ds_up_max = 0.01
         ds_lo_max = 0.025
-        rs_max = 1.1
+        rs_max = 1.14
         snode = [
             TrailingNode(:L),
             LeadingNode(),
-            SurfaceNode(:U,lbjet),
-            SurfaceNode(:U,rbjet),
+            SurfaceNode(:U, xlb),
+            SurfaceNode(:U, xrb),
             TrailingNode(:U)
         ]
         sdist = [
@@ -81,8 +83,7 @@
             EqualSpacing(npjet),
             TanhSpacing(dsjet, ds_te; dsmax=ds_up_max, rsmax=rs_max)
         ]
-        dist = SurfaceDistribution(snode,sdist)
-        x0, y0 = gen_airfoil(airfoil, 257)
+        dist = SurfaceDistribution(snode, sdist)
         points = surface_mesh(dist, x0, y0; mg_level=2)
         mesher = HyperbolicMesher(
             :C,
@@ -94,7 +95,7 @@
             wake_len=25,
             wake_maxl=1,
             wake_ratio=1.14,
-            wake_aoa=0,
+            wake_aoa=5
         )
 
         mesh = gen_mesh(mesher, points, 20; mg_level=2)

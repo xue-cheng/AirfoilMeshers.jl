@@ -1,7 +1,7 @@
 name = "AirfoilMeshers"
 uuid = "fb06ee43-ff84-401b-b5ac-2522e63f9402"
 authors = ["Cheng XUE <xuecheng@nuaa.edu.cn>"]
-version = "0.1.4"
+version = "1.0.0"
 
 [deps]
 Dierckx = "39dd38d3-220a-591b-8e3c-4c3a8c710a94"
@@ -17,11 +17,10 @@ Dierckx = "0.5"
 FortranFiles = "0.6"
 StaticArrays = "1.2"
 TimerOutputs = "0.5"
-julia = "1.6, 1.7"
+julia = "1.6,1.7,1.8"
 
 [extras]
-ParametricAirfoils = "4c14af30-da9f-11e9-34cd-f9f0aee9fd2c"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test", "ParametricAirfoils"]
+test = ["Test"]
